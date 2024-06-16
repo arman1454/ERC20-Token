@@ -9,7 +9,7 @@ describe("deploy", function () {
     const accounts = await ethers.getSigners()
     const deployer = accounts[0];
     const balance = await instance.balanceOf(deployer.address);
-    // console.log(ethers.formatEther(balance));
-    console.log(balance); 
+    console.log(ethers.formatEther(balance));
+    // console.log(balance); 
   });
 });
