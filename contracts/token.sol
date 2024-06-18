@@ -7,12 +7,12 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
 contract token is ERC20Capped,ERC20Burnable {
-    address payable owner;
-    uint public blockReward;
+    address payable public owner;
+    uint256 public blockReward;
     constructor(uint cap, uint reward) ERC20("Arman", "ARM") ERC20Capped(cap *(10 ** decimals())){
         owner = payable(msg.sender);
         _mint(owner, 70000000 * (10**decimals()));
-        reward = reward * (10**decimals());
+        blockReward = reward * (10**decimals());
     }
 
     // function _mint(address account, uint256 amount) internal virtual override(ERC20Capped, ERC20) {
