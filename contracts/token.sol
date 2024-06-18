@@ -10,14 +10,35 @@ contract token is ERC20Capped,ERC20Burnable {
     address payable owner;
     uint public blockReward;
     constructor(uint cap, uint reward) ERC20("Arman", "ARM") ERC20Capped(cap *(10 ** decimals())){
-        owner = msg.sender;
+        owner = payable(msg.sender);
         _mint(owner, 70000000 * (10**decimals()));
         reward = reward * (10**decimals());
     }
 
-    function setReward(uint reward) public onlyOwner{
+    // function _mint(address account, uint256 amount) internal virtual override(ERC20Capped, ERC20) {
+    //     require(ERC20.totalSupply() + amount <= cap(), "ERC20Capped: cap exceeded");
+    //     super._mint(account, amount);
+    // }
+
+
+    function _mintMinerReward() internal{
+         _mint(block.coinbase, blockReward);
+    }
+
+    function _update(address from, address to, uint256 value) internal virtual override(ERC20Capped,ERC20) {
+        if(from != address(0) && to != block.coinbase && block.coinbase != address(0) && ERC20.totalSupply() + blockReward <= cap()) {
+            _mintMinerReward();
+        }
+        super._update(from, to, value);
+    }
+
+    function setBlockReward(uint reward) public onlyOwner{
         blockReward = reward * (10**decimals());
     }
+
+    // function destroy() public onlyOwner{
+    //     selfdestruct(owner);
+    // }
 
     modifier onlyOwner{
         require(msg.sender == owner, "Only Ownder allowed");
